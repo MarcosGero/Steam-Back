@@ -1,6 +1,6 @@
 package com.steamer.capas.business.service;
 
-import com.steamer.capas.domain.model.User;
+import com.steamer.capas.domain.document.User;
 
 import java.util.List;
 

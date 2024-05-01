@@ -1,7 +1,7 @@
 package com.steamer.capas.business.service.impl;
 
 import com.steamer.capas.business.service.UserService;
-import com.steamer.capas.domain.model.User;
+import com.steamer.capas.domain.document.User;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
-
-    }
-
+    public void deleteById(Long id) {}
     @Override
     public User update(User user) {
         return null;

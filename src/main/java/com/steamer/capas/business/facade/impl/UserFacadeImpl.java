@@ -6,6 +6,7 @@ import com.steamer.capas.business.mapper.UserRequestMapper;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.UserRequest;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class UserFacadeImpl implements UserFacade {
     public UserDTO createNew(UserRequest request) {
         return null;
     }
-
+       // var userRequest =
     @Override
     public UserDTO getById(Long id) {
         return null;
