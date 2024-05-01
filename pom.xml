@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gelura</groupId>
-	<artifactId>vapor-back</artifactId>
+	<artifactId>Steamer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>vapor-back</name>
 	<description>Steam clone</description>
@@ -44,7 +44,12 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
