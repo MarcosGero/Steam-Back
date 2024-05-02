@@ -15,7 +15,7 @@ public class UserController {
         this.userFacade = userFacade;
     }
     @GetMapping("/{id}")
-    public UserDTO getById(@PathVariable long id){
+    public UserDTO getById(@PathVariable String id){
         return userFacade.getById(id);
     }
     @GetMapping
@@ -30,12 +30,12 @@ public class UserController {
 
     @PutMapping("/{id}")
     public UserDTO userEdit(@RequestBody UserRequest taskRequest,
-                            @PathVariable Long id){
+                            @PathVariable String id){
         return userFacade.update(taskRequest, id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable Long id){
+    public void deleteUserById(@PathVariable String id){
         userFacade.deleteById(id);
     }
 

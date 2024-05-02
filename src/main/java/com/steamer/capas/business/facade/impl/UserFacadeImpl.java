@@ -34,7 +34,7 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public UserDTO getById(Long id) {
+    public UserDTO getById(String id) {
         User user = userService.getById(id);            // Retrieve User by ID
         if (user != null) {
             return userMapper.toUserDTO(user);          // Convert User to UserDTO
@@ -51,14 +51,14 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         userService.deleteById(id);                     // Delete User by ID
     }
 
     @Override
-    public UserDTO update(UserRequest request, Long id) {
+    public UserDTO update(UserRequest request, String id) {
         User user = userRequestMapper.toUser(request);  // Convert UserRequest to User
-        user.(id);                                 // Set ID of the User to ensure correct update
+        user.setId(id);                                 // Set ID of the User to ensure correct update
         User updatedUser = userService.update(user);    // Update User in the database
         return userMapper.toUserDTO(updatedUser);       // Convert updated User to UserDTO
     }

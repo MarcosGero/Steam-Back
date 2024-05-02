@@ -22,9 +22,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+
     @Override
-    public User getById(Long id) {
-        var optionalUser = userRepository.findById(id);
+    public User getById(String id) {
+        var optionalUser = userRepository.findById(Long.valueOf(id));
 
         //Implementar String.format(UserConstant.TASK_NOT_FOUND_MESSAGE_ERROR, id)
         if (optionalUser.isEmpty()){
@@ -41,8 +42,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void deleteById(String id) {
+        userRepository.deleteById(Long.valueOf(id));
     }
 
     @Override

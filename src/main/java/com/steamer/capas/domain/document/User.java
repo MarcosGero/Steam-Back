@@ -33,6 +33,13 @@ public class User {
     private boolean enableNotifications; // Si el usuario recibe notificaciones
     private String preferredLanguage;    // Idioma preferido del usuario
 
+    public User(String userName, String email, String country,String password) {
+        this.userName = userName;
+        this.email = email;
+        this.country = country;
+        this.password = password;
+    }
+
     public String getId() {
         return id;
     }
