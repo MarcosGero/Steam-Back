@@ -14,4 +14,6 @@ public class User {
     private String userName;
     private String mail;
     private String country;
+
+    private String password;
 }
