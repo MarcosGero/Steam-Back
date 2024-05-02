@@ -4,7 +4,7 @@ import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.UserRequest;
 import org.springframework.web.bind.annotation.*;
-
+import com.steamer.capas.domain.dto.request.LoginRequest;
 import java.util.List;
 
 @RestController
@@ -37,6 +37,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable Long id){
         userFacade.deleteById(id);
+    }
+
+    public UserDTO login(@RequestBody LoginRequest loginRequest) {
+        return userFacade.login(loginRequest);
     }
 
 }

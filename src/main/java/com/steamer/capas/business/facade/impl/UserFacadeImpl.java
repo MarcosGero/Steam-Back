@@ -5,6 +5,7 @@ import com.steamer.capas.business.mapper.UserMapper;
 import com.steamer.capas.business.mapper.UserRequestMapper;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.domain.dto.UserDTO;
+import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.UserRequest;
 
 import org.springframework.stereotype.Service;
@@ -46,4 +47,13 @@ public class UserFacadeImpl implements UserFacade {
     public UserDTO update(UserRequest request, Long id) {
         return null;
     }
+<<<<<<< Updated upstream
 }
+=======
+
+    @Override
+    public UserDTO login(LoginRequest loginRequest) {
+        return userService.login(loginRequest);
+    }
+}
+>>>>>>> Stashed changes
