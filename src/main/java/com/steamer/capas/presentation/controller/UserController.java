@@ -39,6 +39,7 @@ public class UserController {
         userFacade.deleteById(id);
     }
 
+    @PostMapping("/login")
     public UserDTO login(@RequestBody LoginRequest loginRequest) {
         return userFacade.login(loginRequest);
     }
