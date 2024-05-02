@@ -17,5 +17,13 @@ public class PasswordEncoderService {
     public void cleanup(String password) {
         argon2.wipeArray(password.toCharArray());
     }
+
+    public boolean matches(String hashedPassword, String providedPassword) {
+        return argon2.verify(hashedPassword, providedPassword.toCharArray());
+    }
+
 }
+
+
+
 

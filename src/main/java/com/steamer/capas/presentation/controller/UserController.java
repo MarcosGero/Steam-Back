@@ -2,6 +2,7 @@ package com.steamer.capas.presentation.controller;
 
 import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.domain.dto.UserDTO;
+import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.UserRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable String id){
         userFacade.deleteById(id);
+    }
+
+    @PostMapping("/login")
+    public UserDTO login(@RequestBody LoginRequest loginRequest) {
+        return userFacade.login(loginRequest);
     }
 
 }

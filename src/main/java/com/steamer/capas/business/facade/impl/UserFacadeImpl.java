@@ -5,6 +5,7 @@ import com.steamer.capas.business.mapper.UserMapper;
 import com.steamer.capas.business.mapper.UserRequestMapper;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.domain.dto.UserDTO;
+import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.UserRequest;
 import com.steamer.capas.domain.document.User;
 
@@ -62,4 +63,10 @@ public class UserFacadeImpl implements UserFacade {
         User updatedUser = userService.update(user);    // Update User in the database
         return userMapper.toUserDTO(updatedUser);       // Convert updated User to UserDTO
     }
+
+    @Override
+    public UserDTO login(LoginRequest loginRequest) {
+        return userService.login(loginRequest);
+    }
 }
+
