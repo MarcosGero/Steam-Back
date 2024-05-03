@@ -63,6 +63,8 @@ public class UserServiceImpl implements UserService {
     public UserDTO login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
+        System.out.println("email:"+ email);
+        System.out.println("password:"+ password);
 
         User user = userRepository.findByEmail(email); // Busca por email
         if (user == null) {
@@ -83,7 +85,6 @@ public class UserServiceImpl implements UserService {
         String avatarUrl = user.getAvatarUrl();
         boolean enableNotifications = user.isEnableNotifications();
         String preferredLanguage = user.getPreferredLanguage();
-
         return new UserDTO(user.getId(), user.getUserName(), user.getEmail(), country,
                 lastLogin, profileVisibility, ownedGames, wishListGames, isOnline,
                 avatarUrl, enableNotifications, preferredLanguage);

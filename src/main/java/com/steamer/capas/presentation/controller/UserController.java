@@ -42,6 +42,7 @@ public class UserController {
 
     @PostMapping("/login")
     public UserDTO login(@RequestBody LoginRequest loginRequest) {
+        System.out.println("Login method enter userController\n");
         return userFacade.login(loginRequest);
     }
 
