@@ -10,6 +10,7 @@ import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.persistence.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoderService passwordEncoderService; // Inject here
+
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoderService passwordEncoderService) {
         this.userRepository = userRepository;
@@ -72,7 +74,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        if (!passwordEncoderService.matches(password, user.getPassword())) {
+        if (!passwordEncoderService.matches(user.getPassword(),password)) {
             throw new UserException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
         }
 

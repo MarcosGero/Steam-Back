@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDTO create(@RequestBody UserRequest taskRequest){
-        return userFacade.createNew(taskRequest);
+    public UserDTO create(@RequestBody UserRequest userRequest){
+        return userFacade.createNew(userRequest);
     }
 
     @PutMapping("/{id}")
