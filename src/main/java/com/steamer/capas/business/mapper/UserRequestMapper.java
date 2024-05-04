@@ -1,6 +1,6 @@
 package com.steamer.capas.business.mapper;
 import com.steamer.capas.domain.document.User;
-import com.steamer.capas.domain.dto.request.UserRequest;
+import com.steamer.capas.domain.dto.request.SignUpRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -23,9 +23,9 @@ public interface UserRequestMapper {
     @Mapping(target = "avatarUrl", ignore = true)          // Default or not included in request
     @Mapping(target = "enableNotifications", ignore = true)// Assume default
     @Mapping(target = "preferredLanguage", ignore = true)  // Default or set separately
-    User toUser(UserRequest userRequest);
+    User toUser(SignUpRequest signUpRequest);
 
     // Actualizar User existente con datos de UserRequest
     @Mapping(target = "id", ignore = true)  // ID should not be overwritten
-    void updateUserFromRequest(UserRequest userRequest, @MappingTarget User user);
+    void updateUserFromRequest(SignUpRequest signUpRequest, @MappingTarget User user);
 }

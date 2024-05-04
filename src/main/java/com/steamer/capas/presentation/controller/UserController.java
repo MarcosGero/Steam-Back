@@ -3,7 +3,7 @@ package com.steamer.capas.presentation.controller;
 import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.LoginRequest;
-import com.steamer.capas.domain.dto.request.UserRequest;
+import com.steamer.capas.domain.dto.request.SignUpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +25,12 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDTO create(@RequestBody UserRequest userRequest){
-        return userFacade.createNew(userRequest);
+    public UserDTO create(@RequestBody SignUpRequest signUpRequest){
+        return userFacade.signUp(signUpRequest);
     }
 
     @PutMapping("/{id}")
-    public UserDTO userEdit(@RequestBody UserRequest taskRequest,
+    public UserDTO userEdit(@RequestBody SignUpRequest taskRequest,
                             @PathVariable String id){
         return userFacade.update(taskRequest, id);
     }

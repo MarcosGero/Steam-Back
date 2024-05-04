@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
+public class SignUpRequest {
     private String userName;       // Nombre de usuario, requerido para la creación y opcional para la actualización
     private String email;          // Correo electrónico, requerido para la creación y opcional para la actualización
     private String password;       // Contraseña, requerido para la creación y opcional para la actualización
