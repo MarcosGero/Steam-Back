@@ -1,19 +1,28 @@
 package com.steamer.capas.domain.document;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Document(collection = "users")
-public class User {
+@Entity
+public class User implements UserDetails {
     @Id
     private String id;  // Cambio a String porque MongoDB usa BSON ObjectId
 
-    @Indexed(unique = true)
+    @Indexed(name = "meta_userName_index_unique",unique = true)
     private String userName;
 
     private String email;
@@ -33,6 +42,8 @@ public class User {
     private boolean enableNotifications; // Si el usuario recibe notificaciones
     private String preferredLanguage;    // Idioma preferido del usuario
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
     public User(String userName, String email, String country,String password) {
         this.userName = userName;
         this.email = email;
@@ -72,8 +83,38 @@ public class User {
         this.country = country;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
     public void setPassword(String password) {

@@ -1,35 +1,31 @@
 package com.steamer.capas.business.service.impl;
 
-import ch.qos.logback.core.boolex.Matcher;
-import com.steamer.capas.business.service.PasswordEncoderService;
+import com.mongodb.DuplicateKeyException;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.common.exception.UserException;
 import com.steamer.capas.domain.document.User;
-import com.steamer.capas.domain.dto.UserDTO;
-import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.persistence.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoderService passwordEncoderService; // Inject here
-
-
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoderService passwordEncoderService) {
-        this.userRepository = userRepository;
-        this.passwordEncoderService = passwordEncoderService;
-    }
     @Override
     public User create(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (DuplicateKeyException e) {
+            // Maneja la excepción si el userName ya existe
+            throw new ServiceException("El nombre de usuario ya está en uso. Por favor, elige otro.");
+        }
     }
 
 
@@ -52,8 +48,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(String id) {
-        userRepository.deleteById(Long.valueOf(id));
+    public void deleteByUsername(String username) {
+
+        User user = userRepository.findByUserName(username);
+
+        userRepository.deleteById(Long.valueOf(user.getId()));
     }
 
     @Override
@@ -61,34 +60,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public UserDTO login(LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
-        System.out.println("email:"+ email);
-        System.out.println("password:"+ password);
-
-        User user = userRepository.findByEmail(email); // Busca por email
-        if (user == null) {
-            throw new UserException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
-
-
-        if (!passwordEncoderService.matches(user.getPassword(),password)) {
-            throw new UserException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
-        }
-
-        String country = user.getCountry();
-        Date lastLogin = user.getLastLogin();
-        String profileVisibility = user.getProfileVisibility();
-        List<String> ownedGames = user.getOwnedGames();
-        List<String> wishListGames = user.getWishListGames();
-        boolean isOnline = user.isOnline();
-        String avatarUrl = user.getAvatarUrl();
-        boolean enableNotifications = user.isEnableNotifications();
-        String preferredLanguage = user.getPreferredLanguage();
-        return new UserDTO(user.getId(), user.getUserName(), user.getEmail(), country,
-                lastLogin, profileVisibility, ownedGames, wishListGames, isOnline,
-                avatarUrl, enableNotifications, preferredLanguage);
-    }
 }

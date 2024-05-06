@@ -3,8 +3,10 @@ package com.steamer.capas.business.facade.impl;
 import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.business.mapper.UserMapper;
 import com.steamer.capas.business.mapper.UserRequestMapper;
-import com.steamer.capas.business.service.PasswordEncoderService;
+import com.steamer.capas.business.service.AuthenticationService;
 import com.steamer.capas.business.service.UserService;
+import com.steamer.capas.domain.dto.request.UpdateRequest;
+import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
@@ -23,22 +25,19 @@ public class UserFacadeImpl implements UserFacade {
     private final UserService userService;
     private final UserRequestMapper userRequestMapper;
     private final UserMapper userMapper;
-    private final PasswordEncoderService passwordEncoderService;
+    private final AuthenticationService authService;
 
     @Override
-    public UserDTO signUp(SignUpRequest request) {
-        User user = userRequestMapper.toUser(request);  // Convert UserRequest to User
-        user.setPassword(passwordEncoderService.hashPassword(user.getPassword()));
-        User savedUser = userService.create(user);      // Save User in the database
-        return userMapper.toUserDTO(savedUser);         // Convert saved User to UserDTO
+    public AuthenticationResponse signUp(SignUpRequest request) {
+        return authService.register(request);
     }
     @Override
-    public void deleteById(String id) {
-        userService.deleteById(id);                     // Delete User by ID
+    public void deleteByUsername(String id) {
+        userService.deleteByUsername(id);                     // Delete User by name
     }
 
     @Override
-    public UserDTO update(SignUpRequest request, String id) {
+    public UserDTO update(UpdateRequest request, String id) {
         User user = userRequestMapper.toUser(request);  // Convert UserRequest to User
         user.setId(id);                                 // Set ID of the User to ensure correct update
         User updatedUser = userService.update(user);    // Update User in the database
@@ -46,8 +45,8 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public UserDTO login(LoginRequest loginRequest) {
-        return userService.login(loginRequest);
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 
     // -------------------------------------------------------------------

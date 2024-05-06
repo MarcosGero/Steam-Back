@@ -10,7 +10,6 @@ public interface UserService {
     User create(User user);
     User getById(String id);
     List<User> getAll();
-    void deleteById(String id);
+    void deleteByUsername(String id);
     User update(User user);
-    UserDTO login(LoginRequest loginRequest);
 }

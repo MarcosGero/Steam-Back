@@ -2,48 +2,26 @@ package com.steamer.capas.presentation.controller;
 
 import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.domain.dto.UserDTO;
-import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
+import com.steamer.capas.domain.dto.request.UpdateRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/user")
 public class UserController {
     private final UserFacade userFacade;
-    public UserController(UserFacade userFacade) {
-        this.userFacade = userFacade;
-    }
-    @GetMapping("/{id}")
-    public UserDTO getById(@PathVariable String id){
-        return userFacade.getById(id);
-    }
-    @GetMapping
-    public List<UserDTO> getAll() {
-        return userFacade.getAll();
-    }
 
-    @PostMapping()
-    public UserDTO create(@RequestBody SignUpRequest signUpRequest){
-        return userFacade.signUp(signUpRequest);
-    }
-
+    //todo hacer esto, que pueda cambiar cosas. en este incremento no se requiere
     @PutMapping("/{id}")
-    public UserDTO userEdit(@RequestBody SignUpRequest taskRequest,
+    public UserDTO userEdit(@RequestBody UpdateRequest updateRequest,
                             @PathVariable String id){
-        return userFacade.update(taskRequest, id);
+        return userFacade.update(updateRequest, id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable String id){
-        userFacade.deleteById(id);
+        userFacade.deleteByUsername(id);
     }
-
-    @PostMapping("/login")
-    public UserDTO login(@RequestBody LoginRequest loginRequest) {
-        System.out.println("Login method enter userController\n");
-        return userFacade.login(loginRequest);
-    }
-
 }

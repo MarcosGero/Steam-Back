@@ -1,6 +1,7 @@
 package com.steamer.capas.business.mapper;
 import com.steamer.capas.domain.document.User;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
+import com.steamer.capas.domain.dto.request.UpdateRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -25,6 +26,19 @@ public interface UserRequestMapper {
     @Mapping(target = "preferredLanguage", ignore = true)  // Default or set separately
     User toUser(SignUpRequest signUpRequest);
 
+    //@Mapping(target = "userName", source = "userName")
+    //@Mapping(target = "email", source = "email")
+    //@Mapping(target = "password", source = "password")
+    //@Mapping(target = "country", source = "country")
+    //@Mapping(target = "profileVisibility", ignore = true)  // Assume default or not included in the request
+    //@Mapping(target = "lastLogin", ignore = true)          // Not set during creation
+    //@Mapping(target = "ownedGames", ignore = true)         // Empty initially
+    //@Mapping(target = "wishListGames", ignore = true)      // Empty initially
+    //@Mapping(target = "online", ignore = true)           // Defaults to false
+    //@Mapping(target = "avatarUrl", ignore = true)          // Default or not included in request
+    //@Mapping(target = "enableNotifications", ignore = true)// Assume default
+    //@Mapping(target = "preferredLanguage", ignore = true)  // Default or set separately
+    User toUser(UpdateRequest signUpRequest);
     // Actualizar User existente con datos de UserRequest
     @Mapping(target = "id", ignore = true)  // ID should not be overwritten
     void updateUserFromRequest(SignUpRequest signUpRequest, @MappingTarget User user);
