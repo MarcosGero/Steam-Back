@@ -29,31 +29,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-    final String authHeader = request.getHeader("Authorization");
-    final String jwt;
-    final String userName;
-    if (authHeader == null || !authHeader.startsWith("Bearer ")){
-        filterChain.doFilter(request,response);
-        return;
-    }
-    //pos 7 por que si contas el bearer con el espacio es 7
-    jwt = authHeader.substring(7);
-    userName= jwtService.extractUsername(jwt);
-    if(userName!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
-            if(jwtService.isTokenValid(jwt, userDetails)){
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
 
+        final String authHeader = request.getHeader("Authorization");
+        System.out.println("authHeader "+ authHeader);
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            final String jwt = authHeader.substring(7);  // Extract the token without "Bearer "
+            try {
+                String userName = jwtService.extractUsername(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+                if (jwtService.isTokenValid(jwt,userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                // Handle potential security exceptions (e.g., ExpiredJwtException, MalformedJwtException)
+                System.out.println("Security exception for user " + e.getMessage());
             }
-    }
+        } else {
+            System.out.println("Bearer not found or header does not start with Bearer");
+        }
+
+        filterChain.doFilter(request, response);
     }
 }

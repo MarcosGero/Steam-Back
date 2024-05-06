@@ -12,6 +12,7 @@ import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
 import com.steamer.capas.domain.document.User;
 
+import com.steamer.capas.domain.dto.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,8 @@ public class UserFacadeImpl implements UserFacade {
         return authService.register(request);
     }
     @Override
-    public void deleteByUsername(String id) {
-        userService.deleteByUsername(id);                     // Delete User by name
+    public boolean deleteByUsername(String id) {
+        return userService.deleteByUsername(id);                     // Delete User by name
     }
 
     @Override

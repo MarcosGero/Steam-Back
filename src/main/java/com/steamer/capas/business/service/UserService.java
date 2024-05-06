@@ -10,6 +10,6 @@ public interface UserService {
     User create(User user);
     User getById(String id);
     List<User> getAll();
-    void deleteByUsername(String id);
+    boolean deleteByUsername(String id);
     User update(User user);
 }

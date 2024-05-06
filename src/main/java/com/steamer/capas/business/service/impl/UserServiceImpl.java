@@ -48,11 +48,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteByUsername(String username) {
-
-        User user = userRepository.findByUserName(username);
-
-        userRepository.deleteById(Long.valueOf(user.getId()));
+    public boolean deleteByUsername(String username) {
+        if (userRepository.existsByUserName(username)) {
+            userRepository.deleteByUserName(username);  // Perform the deletion
+        } else {
+            throw new UserException(HttpStatus.NOT_FOUND,"User not found with username: " + username);
+        }
+        return true;
     }
 
     @Override
