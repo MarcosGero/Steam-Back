@@ -46,9 +46,10 @@ public class AuthenticationService {
         String token = signUpUser(
                 new User(
                         request.getUserName(),
-                        request.getPassword(),
                         request.getEmail(),
-                        request.getCountry()
+                        request.getCountry(),
+                        request.getPassword()
+
                 )
         );
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
