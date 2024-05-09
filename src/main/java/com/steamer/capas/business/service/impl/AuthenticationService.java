@@ -1,6 +1,6 @@
 package com.steamer.capas.business.service.impl;
 
-import com.steamer.capas.business.mapper.UserRequestMapper;
+import com.steamer.capas.business.service.EmailSender;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.common.exception.UserException;
 import com.steamer.capas.domain.document.ConfirmationToken;
@@ -9,13 +9,13 @@ import com.steamer.capas.domain.document.Role;
 import com.steamer.capas.domain.document.User;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
-import com.steamer.capas.persistence.ConfirmationTokenRepository;
 import com.steamer.capas.persistence.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,23 +29,33 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final PasswordEncoderService passwordEncoderService; // Inject here
-    private final UserRequestMapper userRequestMapper;
+    private final PasswordEncoderService passwordEncoderService;
+    private final EmailValidator emailValidator;
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
-    public AuthenticationResponse register(SignUpRequest request) {
-        if (userRepository.existsByUserName(request.getUserName())) {
-            throw new UserException(HttpStatus.FORBIDDEN, "Usuario ya registrado");
+    private final EmailSender emailSender;
+
+    public void register(SignUpRequest request) {
+
+        boolean isValidEmail = emailValidator.test(request.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("email not valid");
         }
 
-        User user = userRequestMapper.toUser(request);  // Convert UserRequest to User
-        user.setPassword(passwordEncoderService.hashPassword(user.getPassword()));
-        user.setRole(Role.USER);
-        User savedUser = userService.create(user);      // Save User in the database
-        var jwtToken = jwtService.generateToken(savedUser);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        String token = signUpUser(
+                new User(
+                        request.getUserName(),
+                        request.getPassword(),
+                        request.getEmail(),
+                        request.getCountry()
+                )
+        );
+        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        emailSender.send(
+                request.getEmail(),
+                buildEmail(request.getUserName(), link));
+
     }
 
     public UserDetails loadUserByUsername(String email)
@@ -63,6 +73,11 @@ public class AuthenticationService {
         if (userExists) {
             throw new IllegalStateException("email already taken");
         }
+
+        if (userRepository.existsByUserName(user.getUserName())) {
+            throw new UserException(HttpStatus.FORBIDDEN, "Usuario ya registrado");
+        }
+
         user.setPassword(passwordEncoderService.hashPassword(user.getPassword()));
         user.setRole(Role.USER);
         User savedUser = userService.create(user);
@@ -80,6 +95,34 @@ public class AuthenticationService {
                 confirmationToken);
 
         return token;
+    }
+
+    @Transactional
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        /*if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }*/
+
+        /*confirmationTokenService.setConfirmedAt(token);
+        appUserService.enableAppUser(
+                confirmationToken.getAppUser().getEmail());*/
+
+        return "confirmed";
+    }
+
+    private String buildEmail(String name, String link) {
+        return " ";
     }
 
     // Metodo enableUser(String email) : Usa el repositorio de user
@@ -107,4 +150,6 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+
 }

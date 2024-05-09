@@ -1,6 +1,7 @@
 package com.steamer.capas.presentation.controller;
 
 import com.steamer.capas.business.facade.UserFacade;
+import com.steamer.capas.business.service.impl.AuthenticationService;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.LoginRequest;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
     private final UserFacade userFacade;
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/check")
     public String checkAuth(@RequestHeader("Authorization") String authToken) {
@@ -34,6 +36,11 @@ public class AuthenticationController {
     public void signUp(
             @RequestBody SignUpRequest signUpRequest){
         userFacade.signUp(signUpRequest);
+    }
+
+    @GetMapping(path = "confirm")
+    public String confirm(@RequestParam("token") String token) {
+        return authenticationService.confirmToken(token);
     }
 
     @PostMapping("/login")
