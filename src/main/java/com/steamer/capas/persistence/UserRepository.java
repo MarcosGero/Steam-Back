@@ -13,4 +13,6 @@ public interface UserRepository extends MongoRepository<User, Long> {
     public User findByUserName(String username);
     public boolean existsByUserName(String userName);
     public void deleteByUserName(String userName);
+
+    // Metodo enableUser(String email)
 }
