@@ -3,7 +3,7 @@ package com.steamer.capas.business.facade.impl;
 import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.business.mapper.UserMapper;
 import com.steamer.capas.business.mapper.UserRequestMapper;
-import com.steamer.capas.business.service.AuthenticationService;
+import com.steamer.capas.business.service.impl.AuthenticationService;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.domain.dto.request.UpdateRequest;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
@@ -12,7 +12,6 @@ import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
 import com.steamer.capas.domain.document.User;
 
-import com.steamer.capas.domain.dto.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +52,11 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public boolean checkAuth(String authToken) {
         return authService.isAuthenticated(authToken);
+    }
+
+    @Override
+    public String confirmToken(String token) {
+        return authService.confirmToken(token);
     }
 
     // -------------------------------------------------------------------

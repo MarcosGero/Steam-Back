@@ -19,4 +19,5 @@ public interface UserFacade {
     AuthenticationResponse login(LoginRequest loginRequest);
 
     boolean checkAuth(String authToken);
+    String confirmToken(String token);
 }

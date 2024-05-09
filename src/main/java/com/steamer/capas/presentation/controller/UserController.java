@@ -1,16 +1,12 @@
 package com.steamer.capas.presentation.controller;
 
 import com.steamer.capas.business.facade.UserFacade;
-import com.steamer.capas.business.service.JwtService;
+import com.steamer.capas.business.service.impl.JwtService;
 import com.steamer.capas.domain.dto.UserDTO;
-import com.steamer.capas.domain.dto.request.SignUpRequest;
 import com.steamer.capas.domain.dto.request.UpdateRequest;
-import com.steamer.capas.domain.dto.response.Response;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

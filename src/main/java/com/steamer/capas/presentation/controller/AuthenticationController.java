@@ -36,6 +36,11 @@ public class AuthenticationController {
         userFacade.signUp(signUpRequest);
     }
 
+    @GetMapping(path = "confirm")
+    public String confirm(@RequestParam("token") String token) {
+        return userFacade.confirmToken(token);
+    }
+
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
         System.out.println("Login method enter userController\n");

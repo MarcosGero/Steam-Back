@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends MongoRepository<User, Long> {
-    public User findByEmail(String mail);
+    Optional<User> findByEmail(String mail);
     public User findByUserName(String username);
     public boolean existsByUserName(String userName);
     public void deleteByUserName(String userName);

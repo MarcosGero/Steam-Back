@@ -1,8 +1,7 @@
 package com.steamer.capas.configurations;
-import com.steamer.capas.business.service.PasswordEncoderService;
+import com.steamer.capas.business.service.impl.PasswordEncoderService;
 import com.steamer.capas.domain.document.User;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
