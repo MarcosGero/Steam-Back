@@ -35,9 +35,6 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-    public boolean isAuthenticated(String authToken){
-        return jwtService.isTokenValid(authToken);
-    }
     public AuthenticationResponse login(LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();

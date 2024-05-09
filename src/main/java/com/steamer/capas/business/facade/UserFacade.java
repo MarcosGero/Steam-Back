@@ -11,12 +11,11 @@ import java.util.List;
 
 public interface UserFacade {
 
-    void signUp(SignUpRequest request);
+    AuthenticationResponse signUp(SignUpRequest request);
     UserDTO getById(String id);
     List<UserDTO> getAll();
     boolean deleteByUsername(String username);
     UserDTO update(UpdateRequest request, String id);
     AuthenticationResponse login(LoginRequest loginRequest);
 
-    boolean checkAuth(String authToken);
 }

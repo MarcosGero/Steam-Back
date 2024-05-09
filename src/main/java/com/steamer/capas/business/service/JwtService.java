@@ -1,7 +1,6 @@
 package com.steamer.capas.business.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -29,19 +28,7 @@ public class JwtService {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
-    public boolean isTokenValid(String token) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            return false;
-        }
-        token = token.substring(7);
-        try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
 
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
