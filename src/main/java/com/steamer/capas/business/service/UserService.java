@@ -12,4 +12,5 @@ public interface UserService {
     List<User> getAll();
     boolean deleteByUsername(String id);
     User update(User user);
+    int enableUser(String mail);
 }

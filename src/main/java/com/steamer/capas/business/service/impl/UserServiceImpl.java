@@ -62,4 +62,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public int enableUser(String mail) {
+        return userRepository.enableUser(mail);
+    }
+
 }

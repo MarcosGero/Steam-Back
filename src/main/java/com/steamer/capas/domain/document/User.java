@@ -30,6 +30,7 @@ public class User implements UserDetails {
     private String email;
     private String country;
     private String password;
+    private boolean enable;
 
     // Datos adicionales comunes en una plataforma de juegos como STEAM
     private Date lastLogin;
