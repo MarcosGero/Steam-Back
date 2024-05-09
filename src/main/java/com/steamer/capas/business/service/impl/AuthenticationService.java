@@ -1,6 +1,7 @@
-package com.steamer.capas.business.service;
+package com.steamer.capas.business.service.impl;
 
 import com.steamer.capas.business.mapper.UserRequestMapper;
+import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.common.exception.UserException;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.document.Role;
@@ -9,7 +10,6 @@ import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
 import com.steamer.capas.persistence.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

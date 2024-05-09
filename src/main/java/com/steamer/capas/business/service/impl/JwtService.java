@@ -1,4 +1,4 @@
-package com.steamer.capas.business.service;
+package com.steamer.capas.business.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
