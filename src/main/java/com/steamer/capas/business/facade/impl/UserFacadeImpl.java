@@ -29,8 +29,8 @@ public class UserFacadeImpl implements UserFacade {
     private final AuthenticationService authService;
 
     @Override
-    public AuthenticationResponse signUp(SignUpRequest request) {
-        return authService.register(request);
+    public void signUp(SignUpRequest request) {
+        authService.register(request);
     }
     @Override
     public boolean deleteByUsername(String id) {
@@ -48,6 +48,11 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public AuthenticationResponse login(LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @Override
+    public boolean checkAuth(String authToken) {
+        return authService.isAuthenticated(authToken);
     }
 
     // -------------------------------------------------------------------

@@ -16,6 +16,11 @@ import java.util.List;
 public class AuthenticationController {
     private final UserFacade userFacade;
 
+    @GetMapping("/check")
+    public String checkAuth(@RequestHeader("Authorization") String authToken) {
+        boolean isAuthenticated = userFacade.checkAuth(authToken);
+        return isAuthenticated ? "User is authenticated" : "User is not authenticated";
+    }
     @GetMapping("/{id}")
     public UserDTO getById(@PathVariable String id){
         return userFacade.getById(id);
@@ -26,9 +31,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public AuthenticationResponse signUp(
+    public void signUp(
             @RequestBody SignUpRequest signUpRequest){
-        return userFacade.signUp(signUpRequest);
+        userFacade.signUp(signUpRequest);
     }
 
     @PostMapping("/login")
@@ -36,4 +41,9 @@ public class AuthenticationController {
         System.out.println("Login method enter userController\n");
         return userFacade.login(loginRequest);
     }
+    //Quiza a futuro nos interese implementar esto del lado de back
+    //@GetMapping("/logout")
+    //public AuthenticationResponse logout(@RequestHeader("Authorization") String authToken) {
+    //    ...
+    //}
 }
