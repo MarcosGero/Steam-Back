@@ -24,6 +24,7 @@ public interface UserMapper {
     @Mapping(target = "avatarUrl", source = "avatarUrl")
     @Mapping(target = "enableNotifications", source = "enableNotifications")
     @Mapping(target = "preferredLanguage", source = "preferredLanguage")
+    @Mapping(target = "accountEnabled", source = "accountEnabled")  // Default or set separately
     UserDTO toUserDTO(User user);
 
 }

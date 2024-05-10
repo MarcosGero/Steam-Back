@@ -24,6 +24,7 @@ public interface UserRequestMapper {
     @Mapping(target = "avatarUrl", source = "avatarUrl")          // Default or not included in request
     @Mapping(target = "enableNotifications", source = "enableNotifications")// Assume default
     @Mapping(target = "preferredLanguage", source = "preferredLanguage")  // Default or set separately
+    @Mapping(target = "accountEnabled", ignore = true)  // Default or set separately
     User toUser(SignUpRequest signUpRequest);
 
     //@Mapping(target = "userName", source = "userName")

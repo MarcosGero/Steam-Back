@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private List<String> wishListGames; // Lista de IDs de juegos que el usuario desea
     private boolean isOnline;         // Estado en línea o fuera de línea
     private String avatarUrl;         // URL a la imagen de perfil del usuario
-    private boolean enabled;
+    private boolean accountEnabled;
 
     // Configuración relacionada con la interacción en la comunidad
     private boolean enableNotifications; // Si el usuario recibe notificaciones
@@ -50,6 +50,14 @@ public class User implements UserDetails {
         this.email = email;
         this.country = country;
         this.password = password;
+    }
+
+    public boolean isAccountEnabled() {
+        return accountEnabled;
+    }
+
+    public void setAccountEnabled(boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
     }
 
     public String getId() {

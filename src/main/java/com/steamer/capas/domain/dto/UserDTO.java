@@ -12,6 +12,7 @@ public record UserDTO (
         String profileVisibility,
         List<String> ownedGames,
         List<String> wishListGames,
+        boolean accountEnabled,
         boolean isOnline,
         String avatarUrl,
         boolean enableNotifications,

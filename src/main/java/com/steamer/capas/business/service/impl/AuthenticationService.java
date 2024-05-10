@@ -82,7 +82,7 @@ public class AuthenticationService {
 
         user.setPassword(passwordEncoderService.hashPassword(user.getPassword()));
         user.setRole(Role.USER);
-        user.setEnabled(false);
+        user.setAccountEnabled(false);
 
         User savedUser = userService.create(user);
 
@@ -121,7 +121,7 @@ public class AuthenticationService {
         confirmationTokenService.updateConfirmedAt(token, LocalDate.now().atStartOfDay());
         userService.enableUser(
                 confirmationToken.getUser());
-
+        //response.sendRedirect("http://localhost:3000/confirm-email");
         return "confirmed";
     }
 
@@ -418,11 +418,16 @@ public class AuthenticationService {
         System.out.println("password:"+ password);
 
         User user = userRepository.findByUserName(username); // Busca por email
+
         if (user == null) {
             throw new UserException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
-        if(!user.isEnabled()){
-            throw new UserException(HttpStatus.NOT_FOUND, "Mail no confirmado");
+        System.out.println("user:" + user.getUserName());
+        System.out.println("user:" + user.getEmail());
+        System.out.println("user:" + user.getId());
+        System.out.println("user:" + user.isEnabled());
+        if(!user.isAccountEnabled()){
+            throw new UserException(HttpStatus.NOT_ACCEPTABLE, "Mail no confirmado");
         }
 
 

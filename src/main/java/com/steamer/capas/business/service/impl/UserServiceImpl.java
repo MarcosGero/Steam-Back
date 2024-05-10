@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
         Query query = new Query(Criteria.where("id").is(user.getId()));
         Update update = new Update();
-        update.set("enabled", true);
+        update.set("accountEnabled", true);
         try {
             mongoTemplate.updateFirst(query, update, User.class);
             return true;
