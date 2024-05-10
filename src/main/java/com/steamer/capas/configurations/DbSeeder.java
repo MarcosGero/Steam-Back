@@ -22,9 +22,11 @@ public class DbSeeder implements CommandLineRunner {
         User user1 = new User("username1", "user1@example.com", "Country1",
                 passwordEncoderService.hashPassword("password1"));
         user1.setRole(Role.USER);
+        user1.setAccountEnabled(true);
         User user2 = new User( "username2", "user2@example.com", "Country2",
                 passwordEncoderService.hashPassword("password2"));
         user2.setRole(Role.USER);
+        user2.setAccountEnabled(true);
         // Clear existing data
         mongoTemplate.dropCollection(User.class);
 
