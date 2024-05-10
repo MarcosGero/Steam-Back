@@ -39,4 +39,19 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getUser(HttpServletRequest request) {
+        // Extraer el token JWT del encabezado de la solicitud
+        String token = request.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);  // Extraer el nombre de usuario del token
+
+        // Obtener la información del usuario
+        UserDTO user = userFacade.findByUsername(username);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

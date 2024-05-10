@@ -22,7 +22,7 @@ public class EmailService implements EmailSender {
             .getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
-    
+
     @Override
     @Async
     public void send(String to, String email) {

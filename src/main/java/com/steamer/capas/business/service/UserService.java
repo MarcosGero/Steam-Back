@@ -11,5 +11,6 @@ public interface UserService {
     User getById(String id);
     List<User> getAll();
     boolean deleteByUsername(String id);
+    UserDTO findByUsername(String username);
     User update(User user);
 }
