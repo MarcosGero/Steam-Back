@@ -6,6 +6,7 @@ import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +40,8 @@ public class AuthenticationController {
     }
 
     @GetMapping(path = "/confirm")
-    public String confirm(@RequestParam String token) {
-        return authenticationService.confirmToken(token);
+    public String confirm(@RequestParam String token, HttpServletResponse response) {
+        return authenticationService.confirmToken(token,response);
     }
 
     @PostMapping("/login")

@@ -10,6 +10,7 @@ import com.steamer.capas.domain.document.User;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
 import com.steamer.capas.persistence.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -102,7 +103,7 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public String confirmToken(String token, HttpServletResponse response ) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
@@ -121,8 +122,15 @@ public class AuthenticationService {
         confirmationTokenService.updateConfirmedAt(token, LocalDate.now().atStartOfDay());
         userService.enableUser(
                 confirmationToken.getUser());
-        //response.sendRedirect("http://localhost:3000/confirm-email");
-        return "confirmed";
+
+        try {
+            response.sendRedirect("http://localhost:3000/confirm-email");
+        } catch (Exception e) {
+
+            return "redirect failed";
+        }
+
+        return "redirect:confirmed";
     }
 
     private String buildEmail(String name, String link) {
