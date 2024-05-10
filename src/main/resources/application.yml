@@ -15,10 +15,10 @@ spring:
       port: 27017
       host: localhost
   mail:
-    host: smtp.gmail.com
+    host: smtp.office365.com
     port: 587
-    username: ingweb.steam@gmail.com
-    password: ASDASD@092nmc2.
+    username: ingwebproyecto@outlook.com
+    password: ylemmvibljupcuoz
     properties:
       mail:
         smtp:
