@@ -33,7 +33,7 @@ public class UserFacadeImpl implements UserFacade {
     }
     @Override
     public boolean deleteByUsername(String id) {
-        return userService.deleteByUsername(id);                     // Delete User by name
+        return userService.deleteByUsername(id);
     }
 
     @Override
@@ -43,10 +43,10 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public UserDTO update(UpdateRequest request, String id) {
-        User user = userRequestMapper.toUser(request);  // Convert UserRequest to User
-        user.setId(id);                                 // Set ID of the User to ensure correct update
-        User updatedUser = userService.update(user);    // Update User in the database
-        return userMapper.toUserDTO(updatedUser);       // Convert updated User to UserDTO
+        User user = userRequestMapper.toUser(request);
+        user.setId(id);
+        User updatedUser = userService.update(user);
+        return userMapper.toUserDTO(updatedUser);
     }
 
     @Override
@@ -64,19 +64,19 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public UserDTO getById(String id) {
-        User user = userService.getById(id);            // Retrieve User by ID
+        User user = userService.getById(id);
         if (user != null) {
-            return userMapper.toUserDTO(user);          // Convert User to UserDTO
+            return userMapper.toUserDTO(user);
         }
-        return null;                                    // Return null if user is not found (could throw exception)
+        return null;
     }
 
     @Override
     public List<UserDTO> getAll() {
-        List<User> users = userService.getAll();        // Retrieve all Users
+        List<User> users = userService.getAll();
         return users.stream()
-                .map(userMapper::toUserDTO)        // Convert each User to UserDTO
-                .collect(Collectors.toList());     // Collect results into a List
+                .map(userMapper::toUserDTO)
+                .collect(Collectors.toList());
     }
 }
 

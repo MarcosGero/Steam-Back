@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
     public User getById(String id) {
         var optionalUser = userRepository.findById(Long.valueOf(id));
 
-        //Implementar String.format(UserConstant.TASK_NOT_FOUND_MESSAGE_ERROR, id)
         if (optionalUser.isEmpty()){
             throw new UserException(HttpStatus.NOT_FOUND,"Error getById");
         }

@@ -16,31 +16,19 @@ public interface UserRequestMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "country", source = "country")
-    @Mapping(target = "profileVisibility", source = "profileVisibility")  // Assume default or not included in the request
-    @Mapping(target = "lastLogin", ignore = true)          // Not set during creation
-    @Mapping(target = "ownedGames", ignore = true)         // Empty initially
-    @Mapping(target = "wishListGames", ignore = true)      // Empty initially
-    @Mapping(target = "online", ignore = true)           // Defaults to false
-    @Mapping(target = "avatarUrl", source = "avatarUrl")          // Default or not included in request
-    @Mapping(target = "enableNotifications", source = "enableNotifications")// Assume default
-    @Mapping(target = "preferredLanguage", source = "preferredLanguage")  // Default or set separately
-    @Mapping(target = "accountEnabled", ignore = true)  // Default or set separately
+    @Mapping(target = "profileVisibility", source = "profileVisibility")
+    @Mapping(target = "lastLogin", ignore = true)
+    @Mapping(target = "ownedGames", ignore = true)
+    @Mapping(target = "wishListGames", ignore = true)
+    @Mapping(target = "online", ignore = true)
+    @Mapping(target = "avatarUrl", source = "avatarUrl")
+    @Mapping(target = "enableNotifications", source = "enableNotifications")
+    @Mapping(target = "preferredLanguage", source = "preferredLanguage")
+    @Mapping(target = "accountEnabled", ignore = true)
     User toUser(SignUpRequest signUpRequest);
 
-    //@Mapping(target = "userName", source = "userName")
-    //@Mapping(target = "email", source = "email")
-    //@Mapping(target = "password", source = "password")
-    //@Mapping(target = "country", source = "country")
-    //@Mapping(target = "profileVisibility", ignore = true)  // Assume default or not included in the request
-    //@Mapping(target = "lastLogin", ignore = true)          // Not set during creation
-    //@Mapping(target = "ownedGames", ignore = true)         // Empty initially
-    //@Mapping(target = "wishListGames", ignore = true)      // Empty initially
-    //@Mapping(target = "online", ignore = true)           // Defaults to false
-    //@Mapping(target = "avatarUrl", ignore = true)          // Default or not included in request
-    //@Mapping(target = "enableNotifications", ignore = true)// Assume default
-    //@Mapping(target = "preferredLanguage", ignore = true)  // Default or set separately
     User toUser(UpdateRequest signUpRequest);
     // Actualizar User existente con datos de UserRequest
-    @Mapping(target = "id", ignore = true)  // ID should not be overwritten
+    @Mapping(target = "id", ignore = true)
     void updateUserFromRequest(SignUpRequest signUpRequest, @MappingTarget User user);
 }
