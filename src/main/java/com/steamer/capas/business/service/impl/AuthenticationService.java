@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -52,7 +53,7 @@ public class AuthenticationService {
 
                 )
         );
-        String link = "http://localhost:3000/api/v1/registration/confirm?token=" + token;
+        String link = "http://localhost:8080/api/v1/auth/confirm?token=" + token;
         emailSender.send(
                 request.getEmail(),
                 buildEmail(request.getUserName(), link));
@@ -68,11 +69,11 @@ public class AuthenticationService {
     }
 
     public String signUpUser(User user) {
-        boolean userExists = userRepository
+        boolean emailExists = userRepository
                 .findByEmail(user.getEmail())
                 .isPresent();
-        if (userExists) {
-            throw new IllegalStateException("email already taken");
+        if (emailExists) {
+            throw new UserException(HttpStatus.FORBIDDEN, "Email ya registrado");
         }
 
         if (userRepository.existsByUserName(user.getUserName())) {
@@ -81,6 +82,8 @@ public class AuthenticationService {
 
         user.setPassword(passwordEncoderService.hashPassword(user.getPassword()));
         user.setRole(Role.USER);
+        user.setEnabled(false);
+
         User savedUser = userService.create(user);
 
         String token = UUID.randomUUID().toString();
@@ -115,9 +118,9 @@ public class AuthenticationService {
             throw new IllegalStateException("token expired");
         }*/
 
-        /*confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(
-                confirmationToken.getAppUser().getEmail());*/
+        confirmationTokenService.updateConfirmedAt(token, LocalDate.now().atStartOfDay());
+        userService.enableUser(
+                confirmationToken.getUser());
 
         return "confirmed";
     }
@@ -162,7 +165,7 @@ public class AuthenticationService {
                 "                                            \n" +
                 "                                            <tbody><tr>\n" +
                 "                                                <td style=\"font-size:0pt;line-height:0pt;text-align:left;padding-bottom:45px\">\n" +
-                "                                                    <a href=\n"+ link +"\" target=\"_blank\" data-saferedirecturl=\n" + link + "\">\n" +
+                "                                                    <a href=\n\""+ link + "\" target=\"_blank\" data-saferedirecturl=\n \"" + link + "\">\n" +
                 "                                                        <img src=\"https://ci3.googleusercontent.com/meips/ADKq_NZ9VaflsCh1ddbhLqbwx_I2JgwSVe7geJxRqDIy2XKgdDfSxWn3CETHHi-3w2HEvQLlX35Py3ADciq7jJNS-3dnDBV3bm3Wk-so2EAd2mkTZkZ7Po6QjCSSoB4kKCBWprLB=s0-d-e1-ft#https://store.cloudflare.steamstatic.com/public/shared/images/email/logo.png\" width=\"615\" height=\"88\" border=\"0\" alt=\"Steam\" class=\"CToWUd\" data-bit=\"iit\">\n" +
                 "                                                    </a>\n" +
                 "\n" +
@@ -196,7 +199,7 @@ public class AuthenticationService {
                 "\t\t\t\t\t\t\t\t\t<table width=\"400\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"m_4080604597912816771mw-auto\">\n" +
                 "\t\t\t\t\t\t\t\t\t\t<tbody><tr>\n" +
                 "\t\t\t\t\t\t\t\t\t\t\t<td class=\"m_4080604597912816771btn-18 m_4080604597912816771l-grey4\" bgcolor=\"#235ecf\" style=\"font-size:18px;line-height:22px;font-family:Arial,sans-serif,'Motiva Sans';text-align:center;border-radius:5px;letter-spacing:1px;background:linear-gradient(90deg,#3a9bed 0%,#235ecf 100%);color:#f1f1f1;text-transform:uppercase\">\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t\t<a href=\n"+link+"\" style=\"display:block;padding:13px 35px;text-decoration:none;color:#f1f1f1\" target=\"_blank\" data-saferedirecturl=\n"+link+"\">\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t<a href=\n\""+link+"\" style=\"display:block;padding:13px 35px;text-decoration:none;color:#f1f1f1\" target=\"_blank\" data-saferedirecturl=\n\""+link+"\">\n" +
                 "\t\t\t\t\t\t\t\t\t\t\t\t\t<span style=\"text-decoration:none;color:#f1f1f1\">Verificar mi dirección de correo electrónico&nbsp;&nbsp;&nbsp;</span>\n" +
                 "\t\t\t\t\t\t\t\t\t\t\t\t</a>\n" +
                 "\t\t\t\t\t\t\t\t\t\t\t</td>\n" +
@@ -297,7 +300,7 @@ public class AuthenticationService {
                 "                                                            <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n" +
                 "                                                                <tbody><tr>\n" +
                 "                                                                    <td class=\"m_4080604597912816771mpb-40\" style=\"font-size:18px;line-height:25px;color:#000001;font-family:Arial,sans-serif,'Motiva Sans';text-align:left\">\n" +
-                "                                                                        <a href=\n"+link+"\" style=\"text-decoration:underline;color:#000001\" target=\"_blank\" data-saferedirecturl=\n"+link+"\">\n" +
+                "                                                                        <a href=\n\""+link+"\" style=\"text-decoration:underline;color:#000001\" target=\"_blank\" data-saferedirecturl=\n\""+link+"\">\n" +
                 "                                                                            <span style=\"text-decoration:underline;color:#000001\">https://help.steampowered.com</span>\n" +
                 "                                                                        </a>\n" +
                 "                                                                    </td>\n" +
@@ -417,6 +420,9 @@ public class AuthenticationService {
         User user = userRepository.findByUserName(username); // Busca por email
         if (user == null) {
             throw new UserException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        if(!user.isEnabled()){
+            throw new UserException(HttpStatus.NOT_FOUND, "Mail no confirmado");
         }
 
 

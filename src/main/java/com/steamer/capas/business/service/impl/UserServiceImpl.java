@@ -10,6 +10,11 @@ import com.steamer.capas.persistence.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,22 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+    @Override
+    public boolean enableUser(User user) {
+
+        Query query = new Query(Criteria.where("id").is(user.getId()));
+        Update update = new Update();
+        update.set("enabled", true);
+        try {
+            mongoTemplate.updateFirst(query, update, User.class);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Override
     public User create(User user) {
         try {
@@ -70,5 +91,7 @@ public class UserServiceImpl implements UserService {
     public User update(User user) {
         return userRepository.save(user);
     }
+
+
 
 }

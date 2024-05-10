@@ -38,8 +38,8 @@ public class AuthenticationController {
         userFacade.signUp(signUpRequest);
     }
 
-    @GetMapping(path = "confirm")
-    public String confirm(@RequestParam("token") String token) {
+    @GetMapping(path = "/confirm")
+    public String confirm(@RequestParam String token) {
         return authenticationService.confirmToken(token);
     }
 

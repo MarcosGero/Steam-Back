@@ -13,4 +13,5 @@ public interface UserService {
     boolean deleteByUsername(String id);
     UserDTO findByUsername(String username);
     User update(User user);
+    boolean enableUser(User user);
 }

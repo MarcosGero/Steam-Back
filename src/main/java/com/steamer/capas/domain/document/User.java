@@ -37,6 +37,7 @@ public class User implements UserDetails {
     private List<String> wishListGames; // Lista de IDs de juegos que el usuario desea
     private boolean isOnline;         // Estado en línea o fuera de línea
     private String avatarUrl;         // URL a la imagen de perfil del usuario
+    private boolean enabled;
 
     // Configuración relacionada con la interacción en la comunidad
     private boolean enableNotifications; // Si el usuario recibe notificaciones
