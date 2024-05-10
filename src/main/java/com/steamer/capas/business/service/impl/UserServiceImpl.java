@@ -1,9 +1,11 @@
 package com.steamer.capas.business.service.impl;
 
 import com.mongodb.DuplicateKeyException;
+import com.steamer.capas.business.mapper.UserMapper;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.common.exception.UserException;
 import com.steamer.capas.domain.document.User;
+import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.persistence.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     @Override
     public User create(User user) {
         try {
@@ -56,7 +59,13 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
+    public UserDTO findByUsername(String username){
+        if (userRepository.existsByUserName(username)) {
+            return userMapper.toUserDTO(userRepository.findByUserName(username));
+        }else {
+            throw new UserException(HttpStatus.NOT_FOUND, "User not found with username: " + username);
+        }
+    }
     @Override
     public User update(User user) {
         return userRepository.save(user);

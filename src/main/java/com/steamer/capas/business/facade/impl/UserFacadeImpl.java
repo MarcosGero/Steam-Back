@@ -37,6 +37,11 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
+    public UserDTO findByUsername(String username) {
+        return userService.findByUsername(username);
+    }
+
+    @Override
     public UserDTO update(UpdateRequest request, String id) {
         User user = userRequestMapper.toUser(request);  // Convert UserRequest to User
         user.setId(id);                                 // Set ID of the User to ensure correct update
@@ -55,6 +60,8 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     // -------------------------------------------------------------------
+
+
     @Override
     public UserDTO getById(String id) {
         User user = userService.getById(id);            // Retrieve User by ID
