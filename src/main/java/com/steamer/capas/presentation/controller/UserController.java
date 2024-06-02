@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
@@ -53,5 +55,14 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PutMapping("/me/email")
+    public ResponseEntity<String> updateEmail(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+        String newEmail = request.get("email");
 
+        userFacade.updateEmail(username, newEmail);
+
+        return ResponseEntity.ok("Correo electrónico actualizado correctamente.");
+    }
 }

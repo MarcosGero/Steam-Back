@@ -18,7 +18,7 @@ spring:
     host: smtp.office365.com
     port: 587
     username: ingwebproyecto@outlook.com
-    password: ylemmvibljupcuoz
+    password: qvjlrtwlzfbpghcp
     properties:
       mail:
         smtp:

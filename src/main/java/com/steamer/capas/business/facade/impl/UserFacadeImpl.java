@@ -48,7 +48,10 @@ public class UserFacadeImpl implements UserFacade {
         User updatedUser = userService.update(user);
         return userMapper.toUserDTO(updatedUser);
     }
-
+    @Override
+    public void updateEmail(String username, String newEmail) {
+        userService.updateEmail(username, newEmail);
+    }
     @Override
     public AuthenticationResponse login(LoginRequest loginRequest) {
         return authService.login(loginRequest);

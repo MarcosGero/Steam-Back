@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +43,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void updateEmail(String username, String newEmail) {
+        User user = userRepository.findByUserName(username);
+        user.setEmail(newEmail);
+        userRepository.save(user);
+    }
     @Override
     public User create(User user) {
         try {

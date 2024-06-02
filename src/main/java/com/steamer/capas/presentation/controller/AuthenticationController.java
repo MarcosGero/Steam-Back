@@ -8,9 +8,12 @@ import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,6 +52,21 @@ public class AuthenticationController {
         System.out.println("Login method enter userController\n");
         return userFacade.login(loginRequest);
     }
+    @PostMapping("/password-reset/request")
+    public ResponseEntity<String> requestPasswordReset(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        authenticationService.createPasswordResetToken(email);
+        return ResponseEntity.ok("Solicitud de recuperación de contraseña enviada.");
+    }
+
+    @PostMapping("/password-reset/reset")
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String newPassword = request.get("password");
+        authenticationService.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Contraseña restablecida correctamente.");
+    }
+
     //Quiza a futuro nos interese implementar esto del lado de back
     //@GetMapping("/logout")
     //public AuthenticationResponse logout(@RequestHeader("Authorization") String authToken) {

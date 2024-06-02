@@ -16,6 +16,7 @@ public interface UserFacade {
     List<UserDTO> getAll();
     boolean deleteByUsername(String username);
     UserDTO findByUsername(String username);
+    void updateEmail(String username, String newEmail);
     UserDTO update(UpdateRequest request, String id);
     AuthenticationResponse login(LoginRequest loginRequest);
 

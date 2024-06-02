@@ -4,11 +4,13 @@ import com.steamer.capas.business.service.EmailSender;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.common.exception.UserException;
 import com.steamer.capas.domain.document.ConfirmationToken;
+import com.steamer.capas.domain.document.PasswordResetToken;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.document.Role;
 import com.steamer.capas.domain.document.User;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
+import com.steamer.capas.persistence.PasswordResetTokenRepository;
 import com.steamer.capas.persistence.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -36,7 +38,7 @@ public class AuthenticationService {
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
-
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     public void register(SignUpRequest request) {
 
         boolean isValidEmail = emailValidator.test(request.getEmail());
@@ -59,6 +61,33 @@ public class AuthenticationService {
                 request.getEmail(),
                 buildEmail(request.getUserName(), link));
 
+    }
+    public void createPasswordResetToken(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(HttpStatus.NOT_FOUND, "Correo no encontrado"));
+
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken resetToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(resetToken);
+
+        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+        emailSender.send(email, buildPasswordResetEmail(user.getUserName(), resetLink));
+    }
+
+    public void resetPassword(String token, String newPassword) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
+
+        User user = resetToken.getUser();
+        user.setPassword(passwordEncoderService.hashPassword(newPassword));
+        userRepository.save(user);
+
+        passwordResetTokenRepository.delete(resetToken);
+    }
+
+    private String buildPasswordResetEmail(String name, String link) {
+        return "<div>Hola " + name + ",</div>"
+                + "<div>Para restablecer tu contraseña, haz clic en el siguiente enlace: "
+                + "<a href=\"" + link + "\">Restablecer contraseña</a></div>";
     }
 
     public UserDetails loadUserByUsername(String email)
