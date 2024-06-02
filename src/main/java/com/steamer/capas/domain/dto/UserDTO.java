@@ -11,10 +11,12 @@ public record UserDTO (
         Date lastLogin,
         String profileVisibility,
         List<String> ownedGames,
+        String image,
         List<String> wishListGames,
         boolean accountEnabled,
         boolean isOnline,
         String avatarUrl,
+        String imageMimeType,
         boolean enableNotifications,
         String preferredLanguage
 ) {

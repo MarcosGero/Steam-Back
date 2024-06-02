@@ -6,7 +6,9 @@ import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
 import com.steamer.capas.domain.dto.response.Response;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserFacade {
@@ -21,4 +23,6 @@ public interface UserFacade {
     AuthenticationResponse login(LoginRequest loginRequest);
 
     boolean checkAuth(String authToken);
+
+    void asociarImagenAlUsuario(String userId, MultipartFile file) throws IOException;
 }

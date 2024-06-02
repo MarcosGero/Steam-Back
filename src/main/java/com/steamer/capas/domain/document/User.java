@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String email;
     private String country;
     private String password;
+    private String image; // Nuevo campo para almacenar el ID de la imagen
 
     // Datos adicionales comunes en una plataforma de juegos como STEAM
     private Date lastLogin;
