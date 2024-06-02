@@ -1,5 +1,6 @@
 package com.steamer.capas.configurations;
 import com.steamer.capas.business.service.impl.PasswordEncoderService;
+import com.steamer.capas.domain.document.Game;
 import com.steamer.capas.domain.document.Role;
 import com.steamer.capas.domain.document.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +43,7 @@ public class DbSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Clear existing data
         mongoTemplate.dropCollection(User.class);
-
+        mongoTemplate.dropCollection(Game.class);
         // Create users
         User user1 = new User("username1", "user1@example.com", "Country1",
                 passwordEncoderService.hashPassword("password1"));
@@ -53,10 +56,37 @@ public class DbSeeder implements CommandLineRunner {
         user2.setRole(Role.USER);
         user2.setAccountEnabled(true);
         user2.setImage(storeImage("static/image2.webp"));
+        // Create games
+        Game game1 = new Game("Game_1","Description  for game 1" ,"Details for game 1", LocalDate.of(2020, 1, 1),
+                "Developer 1", 29.99, Arrays.asList("Action", "Adventure"),
+                Arrays.asList("game1_image1.jpg", "game1_image2.jpg"),"game1_image1.jpg");
 
+        Game game2 = new Game("Game_2", "Description for game 2","Details for game 2", LocalDate.of(2021, 6, 15),
+                "Developer 2", 49.99, Arrays.asList("RPG", "Fantasy"),
+                Arrays.asList("game2_image1.jpg", "game2_image2.jpg"),"game2_image1.jpg");
+        Game game3 = new Game(
+                "Elden Ring",
+                "Elden Ring is an action role-playing game developed by FromSoftware and published by Bandai Namco Entertainment.",
+                "In the game, players take on the role of a Tarnished, a character exiled from the Lands Between, who must traverse the realm to restore the Elden Ring and become the Elden Lord.",
+                LocalDate.of(2022, 2, 25),
+                "FromSoftware",
+                59.99,
+                Arrays.asList("RPG", "Fantasy", "Open World"),
+                Arrays.asList(
+                        "eldenring_video1.webm",
+                        "eldenring_gameplay1.jpg",
+                        "eldenring_gameplay2.jpg",
+                        "eldenring_gameplay3.jpg",
+                        "eldenring_gameplay4.jpg"
+                ),
+                "eldenring_thumbnail.png"
+        );
         // Insert initial data
         mongoTemplate.insert(user1, "users");
         mongoTemplate.insert(user2, "users");
+        mongoTemplate.insert(game1, "games");
+        mongoTemplate.insert(game2, "games");
+        mongoTemplate.insert(game3, "games");
     }
 
     private String storeImage(String imagePath) {
