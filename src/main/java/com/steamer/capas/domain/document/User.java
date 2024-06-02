@@ -5,7 +5,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +18,6 @@ import java.util.List;
 @Data
 @Document(collection = "users")
 @Entity
-@NoArgsConstructor
 public class User implements UserDetails {
     @Id
     private String id;  // Cambio a String porque MongoDB usa BSON ObjectId
@@ -30,7 +28,7 @@ public class User implements UserDetails {
     private String email;
     private String country;
     private String password;
-    private boolean enable;
+    private String image; // Nuevo campo para almacenar el ID de la imagen
 
     // Datos adicionales comunes en una plataforma de juegos como STEAM
     private Date lastLogin;
@@ -40,6 +38,7 @@ public class User implements UserDetails {
     private List<String> wishListGames; // Lista de IDs de juegos que el usuario desea
     private boolean isOnline;         // Estado en línea o fuera de línea
     private String avatarUrl;         // URL a la imagen de perfil del usuario
+    private boolean accountEnabled;
 
     // Configuración relacionada con la interacción en la comunidad
     private boolean enableNotifications; // Si el usuario recibe notificaciones
@@ -52,6 +51,14 @@ public class User implements UserDetails {
         this.email = email;
         this.country = country;
         this.password = password;
+    }
+
+    public boolean isAccountEnabled() {
+        return accountEnabled;
+    }
+
+    public void setAccountEnabled(boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
     }
 
     public String getId() {

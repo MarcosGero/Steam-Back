@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,5 +42,38 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getUser(HttpServletRequest request) {
+        // Extraer el token JWT del encabezado de la solicitud
+        String token = request.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);  // Extraer el nombre de usuario del token
+
+        // Obtener la información del usuario
+        UserDTO user = userFacade.findByUsername(username);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/me/email")
+    public ResponseEntity<String> updateEmail(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+        String newEmail = request.get("email");
+
+        userFacade.updateEmail(username, newEmail);
+
+        return ResponseEntity.ok("Correo electrónico actualizado correctamente.");
+    }
+    @PostMapping("/{userName}/imagen")
+    public ResponseEntity<String> asociarImagen(@PathVariable String userName, @RequestParam("file") MultipartFile file) {
+        try {
+            userFacade.asociarImagenAlUsuario(userName, file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok("Imagen asociada con éxito.");
     }
 }

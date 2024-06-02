@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         System.out.println("authHeader "+ authHeader);
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            final String jwt = authHeader.substring(7);  // Extract the token without "Bearer "
+            final String jwt = authHeader.substring(7);
             try {
                 String userName = jwtService.extractUsername(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
@@ -41,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-                // Handle potential security exceptions (e.g., ExpiredJwtException, MalformedJwtException)
                 System.out.println("Security exception for user " + e.getMessage());
             }
         } else {
