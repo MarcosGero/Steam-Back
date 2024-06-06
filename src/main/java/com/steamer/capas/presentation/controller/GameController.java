@@ -92,6 +92,10 @@ public class GameController {
 
         return imageUrl;
     }
+    @GetMapping("/search/{query}")
+    public List<Game> searchGames(@PathVariable String query) {
+        return gameRepository.findByNameContainingIgnoreCase(query);
+    }
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
         Path filePath = Paths.get(UPLOAD_DIR).resolve(filename).normalize();
