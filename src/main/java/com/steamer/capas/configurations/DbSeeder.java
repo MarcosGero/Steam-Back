@@ -57,13 +57,41 @@ public class DbSeeder implements CommandLineRunner {
         user2.setAccountEnabled(true);
         user2.setImage(storeImage("static/image2.webp"));
         // Create games
-        Game game1 = new Game("Game_1","Description  for game 1" ,"Details for game 1", LocalDate.of(2020, 1, 1),
-                "Developer 1", 29.99, Arrays.asList("Action", "Adventure"),
-                Arrays.asList("game1_image1.jpg", "game1_image2.jpg"),"game1_image1.jpg");
+        Game game1 = new Game(
+                "Ghost of Tsushima: VERSION DEL DIRECTOR",
+                "Recorre el camino de Jin Sakai y descubre la experiencia completa de Ghost of Tsushima en esta Versión del Director por primera vez para PC." ,
+                "Se avecina una tormenta. Vive la experiencia completa de Ghost of Tsushima: Versión del Director para PC. Forja tu propio camino y descubre las maravillas de este juego de aventura y acción de mundo abierto, a cargo de Sucker Punch Productions, Nixxes Software y PlayStation Studios",
+                LocalDate.of(2024, 5, 16),
+                "Sucker Punch Productions",
+                49.99, Arrays.asList("Action", "Adventure", "Open World"),
+                Arrays.asList(
+                        "ghost_video1.webm",
+                        "ghost_1.jpg",
+                        "ghost_2.jpg",
+                        "ghost_3.jpg",
+                        "ghost_4.jpg"
 
-        Game game2 = new Game("Game_2", "Description for game 2","Details for game 2", LocalDate.of(2021, 6, 15),
-                "Developer 2", 49.99, Arrays.asList("RPG", "Fantasy"),
-                Arrays.asList("game2_image1.jpg", "game2_image2.jpg"),"game2_image1.jpg");
+                ),
+                "ghost_1.jpg");
+
+        Game game2 = new Game(
+                "EA SPORTS FC 24",
+                "UEFA EURO 2024™\n" +
+                        "Todo el mundo está incluido, tú también. Lidera a tu país contra los mejores y compite por la gloria internacional en el Juego de todos para conquistar el trono europeo.",
+                "EA SPORTS FC™ 24 te da la bienvenida al Juego de Todos: la experiencia futbolística más realista hasta el momento con HyperMotionV, los Estilos de juego optimizados por Opta y un motor Frostbite™ mejorado.",
+                LocalDate.of(2023, 8, 29),
+                "EA Canada & EA Romania",
+                69.99,
+                Arrays.asList("Futbol", "Sport", "Multiplayer"),
+                Arrays.asList(
+                        "fc_video_1.webm",
+                        "fc_video_2.webm",
+                        "fc_1.jpg",
+                        "fc_2.jpg",
+                        "fc_3.jpg"
+                ),
+                "fc_thumbnail.png");
+
         Game game3 = new Game(
                 "Elden Ring",
                 "Elden Ring is an action role-playing game developed by FromSoftware and published by Bandai Namco Entertainment.",
@@ -79,8 +107,8 @@ public class DbSeeder implements CommandLineRunner {
                         "eldenring_gameplay3.jpg",
                         "eldenring_gameplay4.jpg"
                 ),
-                "eldenring_thumbnail.png"
-        );
+                "eldenring_thumbnail.png");
+
         // Insert initial data
         mongoTemplate.insert(user1, "users");
         mongoTemplate.insert(user2, "users");
