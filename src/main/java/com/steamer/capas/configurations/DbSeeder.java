@@ -41,10 +41,10 @@ public class DbSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Clear existing data
+
         mongoTemplate.dropCollection(User.class);
         mongoTemplate.dropCollection(Game.class);
-        // Create users
+
         User user1 = new User("username1", "user1@example.com", "Country1",
                 passwordEncoderService.hashPassword("password1"));
         user1.setRole(Role.USER);
@@ -56,7 +56,7 @@ public class DbSeeder implements CommandLineRunner {
         user2.setRole(Role.USER);
         user2.setAccountEnabled(true);
         user2.setImage(storeImage("static/image2.webp"));
-        // Create games
+
         Game game1 = new Game(
                 "Ghost of Tsushima",
                 "Recorre el camino de Jin Sakai y descubre la experiencia completa de Ghost of Tsushima en esta Versión del Director por primera vez para PC." ,

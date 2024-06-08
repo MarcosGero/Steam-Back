@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteByUsername(String username) {
         if (userRepository.existsByUserName(username)) {
-            userRepository.deleteByUserName(username);  // Perform the deletion
+            userRepository.deleteByUserName(username);
         } else {
             throw new UserException(HttpStatus.NOT_FOUND,"User not found with username: " + username);
         }

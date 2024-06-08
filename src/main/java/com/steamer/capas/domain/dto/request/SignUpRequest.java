@@ -7,14 +7,14 @@ import lombok.*;
 @Getter
 @Setter
 public class SignUpRequest {
-    private String userName;       // Nombre de usuario, requerido para la creación y opcional para la actualización
-    private String email;          // Correo electrónico, requerido para la creación y opcional para la actualización
-    private String password;       // Contraseña, requerido para la creación y opcional para la actualización
-    private String country;        // País, podría ser opcional dependiendo de los requisitos del negocio
-    private String profileVisibility;  // Visibilidad del perfil, opcional
-    private String preferredLanguage;  // Idioma preferido, opcional
+    private String userName;
+    private String email;
+    private String password;
+    private String country;
+    private String profileVisibility;
+    private String preferredLanguage;
 
-    // Otros campos que podrían ser relevantes dependiendo del flujo de la aplicación
-    private String avatarUrl;          // URL para la imagen de perfil, opcional
-    private Boolean enableNotifications;  // Si el usuario desea recibir notificaciones, opcional
+
+    private String avatarUrl;
+    private Boolean enableNotifications;
 }

@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String password;
     private String image; // Nuevo campo para almacenar el ID de la imagen
 
-    // Datos adicionales comunes en una plataforma de juegos como STEAM
+
     private Date lastLogin;
     private List<String> friendsList;
     private String profileVisibility;  // Ejemplo: "public", "friends-only", "private"
@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String avatarUrl;         // URL a la imagen de perfil del usuario
     private boolean accountEnabled;
 
-    // Configuración relacionada con la interacción en la comunidad
+
     private boolean enableNotifications; // Si el usuario recibe notificaciones
     private String preferredLanguage;    // Idioma preferido del usuario
 

@@ -34,6 +34,6 @@ public class ConfirmationTokenService {
         Query query = new Query(Criteria.where("token").is(token));
         Update update = new Update().set("confirmedAt", confirmedAt);
         var result = mongoTemplate.updateFirst(query, update, ConfirmationToken.class);
-        return result.getModifiedCount() == 1 ? 1 : 0; // Simula el comportamiento del método original
+        return result.getModifiedCount() == 1 ? 1 : 0;
     }
 }

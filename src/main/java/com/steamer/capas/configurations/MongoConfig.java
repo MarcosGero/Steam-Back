@@ -11,13 +11,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    // Define the MongoClient bean
+
     @Bean
     public MongoClient mongoClient() {
         return MongoClients.create("mongodb://root:pass12345@localhost:27017/admin");
     }
 
-    // Define the MongoTemplate using the MongoClient bean
+
     @Bean
     public MongoTemplate mongoTemplate(MongoClient mongoClient) {
         return new MongoTemplate(mongoClient, getDatabaseName());
