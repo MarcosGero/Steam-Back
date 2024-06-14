@@ -1,5 +1,6 @@
 package com.steamer.capas.business.facade;
 
+import com.steamer.capas.domain.document.Game;
 import com.steamer.capas.domain.dto.request.UpdateRequest;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.dto.UserDTO;
@@ -23,6 +24,11 @@ public interface UserFacade {
     AuthenticationResponse login(LoginRequest loginRequest);
 
     boolean checkAuth(String authToken);
-
+    public boolean addGameToCarrito(String username, String gameId);
+    public List<String> getCarritoGames(String username);
+    public void clearCarritoGames(String username);
+    public boolean removeGameFromCarrito(String username, String gameId);
     void asociarImagenAlUsuario(String userId, MultipartFile file) throws IOException;
+
+    List<Game> getOwnedGames(String username);
 }

@@ -5,6 +5,8 @@ import com.steamer.capas.business.mapper.UserMapper;
 import com.steamer.capas.business.mapper.UserRequestMapper;
 import com.steamer.capas.business.service.impl.AuthenticationService;
 import com.steamer.capas.business.service.UserService;
+import com.steamer.capas.business.service.impl.CompraService;
+import com.steamer.capas.domain.document.Game;
 import com.steamer.capas.domain.dto.request.UpdateRequest;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
 import com.steamer.capas.domain.dto.UserDTO;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +31,7 @@ public class UserFacadeImpl implements UserFacade {
     private final UserRequestMapper userRequestMapper;
     private final UserMapper userMapper;
     private final AuthenticationService authService;
+    private final CompraService compraService;
 
     @Override
     public void signUp(SignUpRequest request) {
@@ -69,6 +73,11 @@ public class UserFacadeImpl implements UserFacade {
         userService.asociarImagenAlUsuario(userName,file);
     }
 
+    @Override
+    public List<Game> getOwnedGames(String username) {
+        return compraService.getOwnedGames(username);
+    }
+
     // -------------------------------------------------------------------
 
 
@@ -87,6 +96,25 @@ public class UserFacadeImpl implements UserFacade {
         return users.stream()
                 .map(userMapper::toUserDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean addGameToCarrito(String username, String gameId) {
+            return compraService.addGameToCarrito(username,gameId);
+    }
+    @Override
+    public List<String> getCarritoGames(String username) {
+        return compraService.getCarritoGames(username);
+
+    }
+    @Override
+    public void clearCarritoGames(String username) {
+        compraService.clearCarritoGames(username);
+
+    }
+    @Override
+    public boolean removeGameFromCarrito(String username, String gameId) {
+        return compraService.removeGameFromCarrito(username,gameId);
     }
 }
 

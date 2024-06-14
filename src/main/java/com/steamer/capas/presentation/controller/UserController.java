@@ -2,6 +2,7 @@ package com.steamer.capas.presentation.controller;
 
 import com.steamer.capas.business.facade.UserFacade;
 import com.steamer.capas.business.service.impl.JwtService;
+import com.steamer.capas.domain.document.Game;
 import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.domain.dto.request.UpdateRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -67,6 +69,48 @@ public class UserController {
 
         return ResponseEntity.ok("Correo electrónico actualizado correctamente.");
     }
+    @PostMapping("/me/carrito/{gameId}")
+    public ResponseEntity<String> addToCarrito(@PathVariable String gameId, HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+
+        boolean added = userFacade.addGameToCarrito(username, gameId);
+        if (added) {
+            return ResponseEntity.ok("Juego agregado al carrito correctamente.");
+        } else {
+            return ResponseEntity.badRequest().body("No se pudo agregar el juego al carrito.");
+        }
+    }
+    @GetMapping("/me/carrito")
+    public ResponseEntity<List<String>> getCarrito(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+
+        List<String> carritoGames = userFacade.getCarritoGames(username);
+        return ResponseEntity.ok(carritoGames);
+    }
+
+    @DeleteMapping("/me/carrito")
+    public ResponseEntity<String> clearCarrito(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+
+        userFacade.clearCarritoGames(username);
+        return ResponseEntity.ok("Carrito vaciado correctamente.");
+    }
+
+    @DeleteMapping("/me/carrito/{gameId}")
+    public ResponseEntity<String> removeFromCarrito(@PathVariable String gameId, HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+
+        boolean removed = userFacade.removeGameFromCarrito(username, gameId);
+        if (removed) {
+            return ResponseEntity.ok("Juego eliminado del carrito correctamente.");
+        } else {
+            return ResponseEntity.badRequest().body("No se pudo eliminar el juego del carrito.");
+        }
+    }
     @PostMapping("/{userName}/imagen")
     public ResponseEntity<String> asociarImagen(@PathVariable String userName, @RequestParam("file") MultipartFile file) {
         try {
@@ -76,4 +120,13 @@ public class UserController {
         }
         return ResponseEntity.ok("Imagen asociada con éxito.");
     }
+    @GetMapping("/me/ownedGames")
+    public ResponseEntity<List<Game>> getOwnedGames(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+
+        List<Game> ownedGames = userFacade.getOwnedGames(username);
+        return ResponseEntity.ok(ownedGames);
+    }
+
 }

@@ -13,6 +13,7 @@ public record UserDTO (
         List<String> ownedGames,
         String image,
         List<String> wishListGames,
+        List<String> carritoGames,
         boolean accountEnabled,
         boolean isOnline,
         String avatarUrl,

@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ public class User implements UserDetails {
     private List<String> friendsList;
     private String profileVisibility;  // Ejemplo: "public", "friends-only", "private"
     private List<String> ownedGames;   // Lista de IDs de juegos que el usuario posee
+    private List<String> carritoGames;   // Lista de IDs de juegos que el usuario posee
     private List<String> wishListGames; // Lista de IDs de juegos que el usuario desea
     private boolean isOnline;         // Estado en línea o fuera de línea
     private String avatarUrl;         // URL a la imagen de perfil del usuario
@@ -51,6 +53,8 @@ public class User implements UserDetails {
         this.email = email;
         this.country = country;
         this.password = password;
+        this.carritoGames = new ArrayList<>();
+        this.ownedGames = new ArrayList<>();
     }
 
     public boolean isAccountEnabled() {
