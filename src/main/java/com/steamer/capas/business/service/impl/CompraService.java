@@ -34,9 +34,13 @@ public class CompraService {
         return false;
     }
 
-    public List<String> getCarritoGames(String username) {
+    public List<Game> getCarritoGames(String username) {
         User user = userRepository.findByUserName(username);
-        return user != null ? user.getCarritoGames() : null;
+        if (user != null) {
+            List<String> gameIds = user.getCarritoGames();
+            return gameRepository.findByNameIn(gameIds);
+        }
+        return null;
     }
 
     public void clearCarritoGames(String username) {

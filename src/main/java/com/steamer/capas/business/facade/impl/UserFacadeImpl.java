@@ -103,7 +103,7 @@ public class UserFacadeImpl implements UserFacade {
             return compraService.addGameToCarrito(username,gameId);
     }
     @Override
-    public List<String> getCarritoGames(String username) {
+    public List<Game> getCarritoGames(String username) {
         return compraService.getCarritoGames(username);
 
     }

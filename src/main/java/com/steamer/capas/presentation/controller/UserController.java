@@ -82,11 +82,11 @@ public class UserController {
         }
     }
     @GetMapping("/me/carrito")
-    public ResponseEntity<List<String>> getCarrito(HttpServletRequest httpRequest) {
+    public ResponseEntity<List<Game>> getCarrito(HttpServletRequest httpRequest) {
         String token = httpRequest.getHeader("Authorization").substring(7);
         String username = tokenProvider.extractUsername(token);
 
-        List<String> carritoGames = userFacade.getCarritoGames(username);
+        List<Game> carritoGames = userFacade.getCarritoGames(username);
         return ResponseEntity.ok(carritoGames);
     }
 

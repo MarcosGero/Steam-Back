@@ -25,7 +25,7 @@ public interface UserFacade {
 
     boolean checkAuth(String authToken);
     public boolean addGameToCarrito(String username, String gameId);
-    public List<String> getCarritoGames(String username);
+    public List<Game> getCarritoGames(String username);
     public void clearCarritoGames(String username);
     public boolean removeGameFromCarrito(String username, String gameId);
     void asociarImagenAlUsuario(String userId, MultipartFile file) throws IOException;
