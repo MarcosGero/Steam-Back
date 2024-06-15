@@ -14,6 +14,7 @@ public record UserDTO (
         String image,
         List<String> wishListGames,
         List<String> carritoGames,
+        float cartera,
         boolean accountEnabled,
         boolean isOnline,
         String avatarUrl,

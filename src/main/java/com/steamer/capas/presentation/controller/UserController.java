@@ -128,5 +128,22 @@ public class UserController {
         List<Game> ownedGames = userFacade.getOwnedGames(username);
         return ResponseEntity.ok(ownedGames);
     }
+    @PostMapping("/me/purchase")
+    public ResponseEntity<?> purchase(HttpServletRequest request, @RequestBody Map<String, Double> requestBody) {
+        String token = request.getHeader("Authorization").substring(7);
+        String username = tokenProvider.extractUsername(token);
+        double totalPrice = requestBody.get("totalPrice");
 
+        UserDTO user = userFacade.findByUsername(username);
+        if (user.cartera() < totalPrice) {
+            return ResponseEntity.badRequest().body("No tienes suficiente dinero en tu cartera.");
+        }
+
+        boolean purchaseSuccess = userFacade.purchase(username, totalPrice);
+        if (purchaseSuccess) {
+            return ResponseEntity.ok(Map.of("success", true));
+        } else {
+            return ResponseEntity.badRequest().body("Error al procesar la compra.");
+        }
+    }
 }

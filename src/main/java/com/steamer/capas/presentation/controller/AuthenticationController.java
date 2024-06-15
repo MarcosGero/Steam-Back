@@ -67,9 +67,13 @@ public class AuthenticationController {
         return ResponseEntity.ok("Contraseña restablecida correctamente.");
     }
 
-    //Quiza a futuro nos interese implementar esto del lado de back
-    //@GetMapping("/logout")
-    //public AuthenticationResponse logout(@RequestHeader("Authorization") String authToken) {
-    //    ...
-    //}
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authToken) {
+        boolean isLoggedOut = authenticationService.logout(authToken);
+        if (isLoggedOut) {
+            return ResponseEntity.ok("User logged out successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        }
+    }
 }

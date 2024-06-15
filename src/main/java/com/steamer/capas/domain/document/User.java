@@ -41,6 +41,7 @@ public class User implements UserDetails {
     private boolean isOnline;         // Estado en línea o fuera de línea
     private String avatarUrl;         // URL a la imagen de perfil del usuario
     private boolean accountEnabled;
+    private float cartera;
 
 
     private boolean enableNotifications; // Si el usuario recibe notificaciones
@@ -55,6 +56,15 @@ public class User implements UserDetails {
         this.password = password;
         this.carritoGames = new ArrayList<>();
         this.ownedGames = new ArrayList<>();
+        this.cartera = 0;
+    }
+
+    public float getCartera() {
+        return cartera;
+    }
+
+    public void setCartera(float cartera) {
+        this.cartera = cartera;
     }
 
     public boolean isAccountEnabled() {

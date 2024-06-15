@@ -3,6 +3,7 @@ package com.steamer.capas.business.service.impl;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.domain.document.Game;
 import com.steamer.capas.domain.document.User;
+import com.steamer.capas.domain.dto.UserDTO;
 import com.steamer.capas.persistence.GameRepository;
 import com.steamer.capas.persistence.UserRepository;
 import lombok.AllArgsConstructor;
@@ -73,5 +74,20 @@ public class CompraService {
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    public boolean purchaseGame(String username, double totalPrice) {
+        User user = userRepository.findByUserName(username);
+        if (user.getCartera() < totalPrice) {
+            return false;
+        }
+
+        List<String> cartGames = user.getCarritoGames();
+        user.getOwnedGames().addAll(cartGames);
+        user.setCarritoGames(new ArrayList<>());
+        user.setCartera((float) (user.getCartera() - totalPrice));
+
+        userRepository.save(user);
+        return true;
     }
 }

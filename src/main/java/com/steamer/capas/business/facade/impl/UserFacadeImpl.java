@@ -116,5 +116,8 @@ public class UserFacadeImpl implements UserFacade {
     public boolean removeGameFromCarrito(String username, String gameId) {
         return compraService.removeGameFromCarrito(username,gameId);
     }
+    public boolean purchase(String username, double totalPrice) {
+        return compraService.purchaseGame(username, totalPrice);
+    }
 }
 

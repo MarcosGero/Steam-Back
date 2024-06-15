@@ -31,4 +31,5 @@ public interface UserFacade {
     void asociarImagenAlUsuario(String userId, MultipartFile file) throws IOException;
 
     List<Game> getOwnedGames(String username);
+    public boolean purchase(String username, double totalPrice);
 }

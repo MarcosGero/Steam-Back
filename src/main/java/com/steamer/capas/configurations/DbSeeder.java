@@ -1,5 +1,6 @@
 package com.steamer.capas.configurations;
 import com.steamer.capas.business.service.impl.PasswordEncoderService;
+import com.steamer.capas.domain.document.AuthToken;
 import com.steamer.capas.domain.document.Game;
 import com.steamer.capas.domain.document.Role;
 import com.steamer.capas.domain.document.User;
@@ -44,6 +45,7 @@ public class DbSeeder implements CommandLineRunner {
 
         mongoTemplate.dropCollection(User.class);
         mongoTemplate.dropCollection(Game.class);
+        mongoTemplate.dropCollection(AuthToken.class);
 
         User user1 = new User("username1", "user1@example.com", "Country1",
                 passwordEncoderService.hashPassword("password1"));
@@ -51,6 +53,7 @@ public class DbSeeder implements CommandLineRunner {
         user1.setAccountEnabled(true);
         user1.getOwnedGames().add("Bitburner");
         user1.getOwnedGames().add("NaissanceE");
+        user1.setCartera(65);
         user1.setImage(storeImage("static/image1.png"));
 
         User user2 = new User("username2", "user2@example.com", "Country2",
@@ -58,7 +61,7 @@ public class DbSeeder implements CommandLineRunner {
         user2.setRole(Role.USER);
         user2.setAccountEnabled(true);
         user2.setImage(storeImage("static/image2.webp"));
-
+        user2.setCartera(35);
         Game game1 = new Game(
                 "Ghost of Tsushima",
                 "Recorre el camino de Jin Sakai y descubre la experiencia completa de Ghost of Tsushima en esta Versión del Director por primera vez para PC." ,
@@ -109,7 +112,7 @@ public class DbSeeder implements CommandLineRunner {
                         "eldenring_gameplay3.jpg",
                         "eldenring_gameplay4.jpg"
                 ),
-                "eldenring_thumbnail.png");
+                "eldenring_thumbnail.jpg");
         Game game4 = new Game(
                 "Cyberpunk 2077",
                 "Cyberpunk 2077 es un RPG de aventura y acción de mundo abierto ambientado en la megalópolis de Night City, donde te pondrás en la piel de un mercenario o una mercenaria ciberpunk y vivirás su lucha a vida o muerte por la supervivencia. Mejorado y con contenido nuevo adicional gratuito. Personaliza tu personaje y tu estilo de juego a medida que aceptas trabajos, te labras una reputación y desbloqueas mejoras. Las relaciones que forjes y las decisiones que tomes darán forma al mundo que te rodea. Aquí nacen las leyendas. ¿Cuál será la tuya?\n\nSUMÉRGETE DE LLENO CON LA ACTUALIZACIÓN 2.1\n¡Night City parece más viva que nunca gracias a la actualización gratuita 2.1! Viaja con una red de metro de la NCART totalmente funcional, escucha música mientras exploras la ciudad con tu Radioport, queda con los churris en el apartamento de V, compite en carreras rejugables, conduce nuevos vehículos, disfruta de las mejoras en el manejo y el combate en moto, descubre secretos ocultos y mucho mucho más.\n\nCREA TU PROPIO CIBERPUNK\nConviértete en un forajido urbano equipado con las últimas mejoras cibernéticas y escribe tu leyenda en las calles de Night City.\n\nEXPLORA LA CIUDAD DEL FUTURO\nNight City está repleta de cosas por hacer, lugares que visitar y gente que conocer. Y tú decides dónde ir, cuándo ir y cómo llegar allí.\n\nCONSTRUYE TU LEYENDA\nEmprende audaces aventuras y forja relaciones personales con personajes inolvidables cuyos destinos se decidirán a partir de las decisiones que tomes.\n\nEQUIPADO CON MEJORAS\nVive la experiencia de Cyberpunk 2077 con un montón de cambios y mejoras en el sistema de juego, la economía, la ciudad, el uso del mapa y mucho más.\n\nCONSIGUE OBJETOS EXCLUSIVOS\nConsigue objetos del juego y artículos digitales inspirados por los juegos de CD PROJEKT RED como parte del programa Mis recompensas.",

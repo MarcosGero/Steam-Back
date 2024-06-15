@@ -3,17 +3,16 @@ package com.steamer.capas.business.service.impl;
 import com.steamer.capas.business.service.EmailSender;
 import com.steamer.capas.business.service.UserService;
 import com.steamer.capas.common.exception.UserException;
-import com.steamer.capas.domain.document.ConfirmationToken;
-import com.steamer.capas.domain.document.PasswordResetToken;
+import com.steamer.capas.domain.document.*;
 import com.steamer.capas.domain.dto.response.AuthenticationResponse;
-import com.steamer.capas.domain.document.Role;
-import com.steamer.capas.domain.document.User;
 import com.steamer.capas.domain.dto.request.LoginRequest;
 import com.steamer.capas.domain.dto.request.SignUpRequest;
+import com.steamer.capas.persistence.AuthTokenRepository;
 import com.steamer.capas.persistence.PasswordResetTokenRepository;
 import com.steamer.capas.persistence.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +30,8 @@ public class AuthenticationService {
     private final static String USER_NOT_FOUND_MSG =
             "user with email %s not found";
 
+
+    private AuthTokenRepository authTokenRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoderService passwordEncoderService;
@@ -84,6 +85,16 @@ public class AuthenticationService {
         passwordResetTokenRepository.delete(resetToken);
     }
 
+    public boolean logout(String authToken) {
+        if (authToken != null && authToken.startsWith("Bearer ")) {
+            String token = authToken.substring(7);
+            if (authTokenRepository.existsByToken(token)) {
+                authTokenRepository.deleteByToken(token);
+                return true;
+            }
+        }
+        return false;
+    }
     private String buildPasswordResetEmail(String name, String link) {
         return "<div>Hola " + name + ",</div>"
                 + "<div>Para restablecer tu contraseña, haz clic en el siguiente enlace: "
@@ -160,6 +171,46 @@ public class AuthenticationService {
         }
 
         return "redirect:confirmed";
+    }
+
+    // Metodo enableUser(String email) : Usa el repositorio de user
+
+
+    public boolean isAuthenticated(String authToken) {
+        if ( authToken != null && jwtService.isTokenValid(authToken)&& authToken.startsWith("Bearer ")) {
+            String token = authToken.substring(7);
+            return authTokenRepository.existsByToken(token);
+        }
+        return false;
+    }
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+        System.out.println("username:"+ username);
+        System.out.println("password:"+ password);
+
+        User user = userRepository.findByUserName(username); // Busca por email
+
+        if (user == null) {
+            throw new UserException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        System.out.println("user:" + user.getUserName());
+        System.out.println("user:" + user.getEmail());
+        System.out.println("user:" + user.getId());
+        System.out.println("user:" + user.isEnabled());
+        if(!user.isAccountEnabled()){
+            throw new UserException(HttpStatus.NOT_ACCEPTABLE, "Mail no confirmado");
+        }
+
+
+        if (!passwordEncoderService.matches(user.getPassword(),password)) {
+            throw new UserException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
+        }
+        var jwtToken = jwtService.generateToken(user);
+        authTokenRepository.save(new AuthToken(jwtToken));
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 
     private String buildEmail(String name, String link) {
@@ -441,40 +492,6 @@ public class AuthenticationService {
                 "\n" +
                 "\n" +
                 "</div></div></div>";
-    }
-
-    // Metodo enableUser(String email) : Usa el repositorio de user
-
-    public boolean isAuthenticated(String authToken){
-        return jwtService.isTokenValid(authToken);
-    }
-    public AuthenticationResponse login(LoginRequest loginRequest) {
-        String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword();
-        System.out.println("username:"+ username);
-        System.out.println("password:"+ password);
-
-        User user = userRepository.findByUserName(username); // Busca por email
-
-        if (user == null) {
-            throw new UserException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
-        System.out.println("user:" + user.getUserName());
-        System.out.println("user:" + user.getEmail());
-        System.out.println("user:" + user.getId());
-        System.out.println("user:" + user.isEnabled());
-        if(!user.isAccountEnabled()){
-            throw new UserException(HttpStatus.NOT_ACCEPTABLE, "Mail no confirmado");
-        }
-
-
-        if (!passwordEncoderService.matches(user.getPassword(),password)) {
-            throw new UserException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
-        }
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
     }
 
 
