@@ -141,6 +141,7 @@ public class UserController {
 
         boolean purchaseSuccess = userFacade.purchase(username, totalPrice);
         if (purchaseSuccess) {
+            System.out.println("successful purchase");
             return ResponseEntity.ok(Map.of("success", true));
         } else {
             return ResponseEntity.badRequest().body("Error al procesar la compra.");
